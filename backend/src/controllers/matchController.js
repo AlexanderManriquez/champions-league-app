@@ -1,0 +1,30 @@
+// src/controllers/fixtureController.js
+import { supabase } from '../config/db.js'
+
+export const getFixturesByTeam = async (req, res) => {
+  const { teamId } = req.params
+
+  try {
+    const { data, error } = await supabase
+      .from('matches')
+      .select(`
+        id,
+        date,
+        home_team:home_team_id (id, name, logo_url),
+        away_team:away_team_id (id, name, logo_url),
+        home_score,
+        away_score,
+        status
+      `)
+      .or(`home_team_id.eq.${teamId},away_team_id.eq.${teamId}`)
+      .order('date')
+
+    if (error) throw error
+
+    res.json(data)
+  } catch (err) {
+    console.error('Error al obtener fixture:', err)
+    res.status(500).json({ error: 'Error al obtener fixture' })
+  }
+}
+
