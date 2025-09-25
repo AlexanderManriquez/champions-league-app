@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getFixturesByTeam } from "../controllers/matchController.js";
+import { getFixturesByTeam } from "../controllers/fixtureController.js";
 
 const router = Router();
 

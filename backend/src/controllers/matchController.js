@@ -1,30 +1,20 @@
-// src/controllers/fixtureController.js
-import { supabase } from '../config/db.js'
+import { supabase } from '../config/db.js';
 
-export const getFixturesByTeam = async (req, res) => {
-  const { teamId } = req.params
+export const updateMatchScore = async (req, res) => {
+  const { id } = req.params;
+  const { home_score, away_score, status } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('matches')
-      .select(`
-        id,
-        date,
-        home_team:home_team_id (id, name, logo_url),
-        away_team:away_team_id (id, name, logo_url),
-        home_score,
-        away_score,
-        status
-      `)
-      .or(`home_team_id.eq.${teamId},away_team_id.eq.${teamId}`)
-      .order('date')
+      .update({ home_score, away_score, status })
+      .eq('id', id)
+      .select();
 
-    if (error) throw error
-
-    res.json(data)
+    if (error) throw error;
+    res.json({ message: "Partido actualizado", data });
   } catch (err) {
-    console.error('Error al obtener fixture:', err)
-    res.status(500).json({ error: 'Error al obtener fixture' })
+    console.error("Error al actualizar partido:", err);
+    res.status(500).json({ error: "Error al actualizar partido" });
   }
-}
-
+};
