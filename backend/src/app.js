@@ -3,8 +3,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 
 import teamRoutes from './routes/teamRoutes.js';
-import eventRoutes from './routes/eventRoutes.js';
-import matchRoutes from './routes/matchRoutes.js';
+import fixtureRoutes from './routes/fixtureRoutes.js';
+import matchesRoutes from './routes/matchesRoutes.js';
 
 const app = express();
 
@@ -17,7 +17,7 @@ app.get('/api/health', (req, res) => {
 })
 
 app.use('/api/teams', teamRoutes);
-app.use('/api/fixtures', matchRoutes);
-app.use('/api/matches', eventRoutes);
+app.use('/api/fixtures', fixtureRoutes);
+app.use('/api/matches', matchesRoutes);
 
 export default app;
