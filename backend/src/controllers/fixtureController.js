@@ -9,6 +9,8 @@ export const getFixturesByTeam = async (req, res) => {
       .select(`
         id,
         match_date,
+        stadium,
+        stage,
         home_team:home_team_id (id, name, logo_url),
         away_team:away_team_id (id, name, logo_url),
         home_score,
@@ -16,7 +18,7 @@ export const getFixturesByTeam = async (req, res) => {
         status
       `)
       .or(`home_team_id.eq.${teamId},away_team_id.eq.${teamId}`)
-      .order('date')
+      .order('match_date', { ascending: true })  // ahora usa la columna correcta
 
     if (error) throw error
 
@@ -26,4 +28,6 @@ export const getFixturesByTeam = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener fixture' })
   }
 }
+
+
 
